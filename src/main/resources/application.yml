@@ -1,0 +1,33 @@
+server:
+  port: 8092
+
+spring:
+  application:
+    name: client_order
+  datasource:
+    url: jdbc:postgresql://localhost:5432/client_order_db
+    driver-class-name: org.postgresql.Driver
+    username: admin
+    password: admin
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+#  liquibase:
+#    enabled: true
+#    change-log: classpath:db/changelog/changelog-master.yml
+logging:
+  level:
+    root: info
+    ru.digitalchief.client_order: debug
+  file:
+    path: ../../
+    name: digitalchiefLog.log
+  logback:
+    rolling policy:
+      total-size-cap: 50MB
