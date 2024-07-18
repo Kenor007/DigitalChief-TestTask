@@ -12,6 +12,7 @@ import ru.digitalchief.client_order.mapper.ClientMapper;
 import ru.digitalchief.client_order.model.Client;
 import ru.digitalchief.client_order.repository.ClientRepository;
 import ru.digitalchief.client_order.service.ClientService;
+import ru.digitalchief.client_order.service.OrderService;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ import static ru.digitalchief.client_order.error_handling.constant.ExceptionAnsw
 @Slf4j
 public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
+    private final OrderService orderService;
     private final ClientMapper clientMapper;
 
     @Override
@@ -31,6 +33,7 @@ public class ClientServiceImpl implements ClientService {
         Client client = clientMapper.clientRequestDtoToClient(clientRequestDto);
         validateClient(client);
         Client savedClient = clientRepository.save(client);
+        orderService.updateOrdersWithClient(savedClient);
         log.debug("Client with id {} is saved", savedClient.getId());
         return clientMapper.clientToClientResponseDto(savedClient);
     }
@@ -61,6 +64,7 @@ public class ClientServiceImpl implements ClientService {
         log.debug("Updating client {}", client);
         client = clientMapper.clientRequestDtoToUpdatedClient(clientRequestDto, client);
         client = clientRepository.save(client);
+        orderService.updateOrdersWithClient(client);
         log.debug("Client with id {} is updated", client.getId());
         return clientMapper.clientToClientResponseDto(client);
     }

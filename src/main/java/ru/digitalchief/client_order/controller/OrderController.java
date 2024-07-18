@@ -1,5 +1,7 @@
 package ru.digitalchief.client_order.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import java.util.List;
 
 import static ru.digitalchief.client_order.error_handling.constant.ExceptionAnswer.POSITIVE_ID;
 
+@Tag(name = "Order Controller", description = "API for working with orders")
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor
@@ -23,6 +26,8 @@ import static ru.digitalchief.client_order.error_handling.constant.ExceptionAnsw
 public class OrderController {
     private final OrderService orderService;
 
+    @Operation(summary = "Create an order by params",
+            description = "Returns information about the order, if the order has been created")
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public OrderResponseDto createOrder(@Valid @RequestBody OrderRequestDto orderRequestDto) {
@@ -30,18 +35,24 @@ public class OrderController {
         return orderService.createOrder(orderRequestDto);
     }
 
+    @Operation(summary = "Get information about the order by id",
+            description = "Returns an information about the order as per the id")
     @GetMapping("/{id}")
     public OrderResponseDto findOrderById(@PathVariable("id") @Positive(message = POSITIVE_ID) Long id) {
         log.debug("Getting order by id: {}", id);
         return orderService.findOrderById(id);
     }
 
+    @Operation(summary = "Get a list of all orders with their information",
+            description = "Returns a list of all orders with their information")
     @GetMapping()
     public List<OrderResponseDto> findAllOrders() {
         log.debug("Getting all orders");
         return orderService.findAllOrders();
     }
 
+    @Operation(summary = "Update order by id",
+            description = "Returns an information about the updated order as per the id")
     @PutMapping("/{id}")
     public OrderResponseDto updateOrderById(
             @PathVariable("id") @Positive(message = POSITIVE_ID) Long id,
@@ -50,6 +61,8 @@ public class OrderController {
         return orderService.updateOrderById(id, orderRequestDto);
     }
 
+    @Operation(summary = "Delete order by id",
+            description = "Returns NO CONTENT if order has been deleted by id")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteOrderById(@PathVariable("id") @Positive(message = POSITIVE_ID) Long id) {

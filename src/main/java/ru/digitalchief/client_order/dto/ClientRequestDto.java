@@ -4,9 +4,13 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Set;
 
+@Getter
+@Setter
 public class ClientRequestDto {
     @NotBlank(message = "Client name should not be blank")
     @Size(min = 1, message = "Client name should contain at least 1 character")
