@@ -22,6 +22,11 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
         return findOne(specification);
     }
 
+    default void deleteAllByClientId(Long clientId) {
+        Specification<Order> specification = Specification.where(clientIdIn(clientId));
+        deleteAll(findAll(specification));
+    }
+
     default Specification<Order> descriptionIn(String description) {
         return attributeEquals("description", description);
     }
@@ -36,6 +41,10 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
 
     default Specification<Order> orderStatusIn(OrderStatus orderStatus) {
         return (order, cq, cb) -> cb.equal(order.get("orderStatus"), orderStatus);
+    }
+
+    default Specification<Order> clientIdIn(Long clientId) {
+        return (order, cq, cb) -> cb.equal(order.get("client").get("id"), clientId);
     }
 
     private static Specification<Order> attributeEquals(String attributeName, String value) {

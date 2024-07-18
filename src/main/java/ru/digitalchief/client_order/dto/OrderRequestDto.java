@@ -1,11 +1,15 @@
 package ru.digitalchief.client_order.dto;
 
 import jakarta.validation.constraints.*;
+import lombok.Getter;
+import lombok.Setter;
 import ru.digitalchief.client_order.model.OrderStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
 public class OrderRequestDto {
     @NotBlank(message = "Order description should not be blank")
     @Size(min = 1, message = "Order description should contain at least 1 character")
@@ -21,6 +25,5 @@ public class OrderRequestDto {
     private LocalDateTime orderDate;
 
     @NotNull(message = "Order status is required")
-    @Pattern(regexp = "COMPLETED|PENDING", message = "Order status must be either COMPLETED or PENDING")
     private OrderStatus orderStatus;
 }

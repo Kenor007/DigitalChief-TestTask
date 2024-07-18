@@ -9,6 +9,7 @@ import ru.digitalchief.client_order.dto.OrderResponseDto;
 import ru.digitalchief.client_order.error_handling.exception.OrderExistsException;
 import ru.digitalchief.client_order.error_handling.exception.OrderNotFoundException;
 import ru.digitalchief.client_order.mapper.OrderMapper;
+import ru.digitalchief.client_order.model.Client;
 import ru.digitalchief.client_order.model.Order;
 import ru.digitalchief.client_order.repository.OrderRepository;
 import ru.digitalchief.client_order.service.OrderService;
@@ -74,6 +75,17 @@ public class OrderServiceImpl implements OrderService {
         } else {
             log.error("Order with id {} not found", orderId);
             throw new OrderNotFoundException(String.format(ORDER_NOT_FOUND, orderId));
+        }
+    }
+
+    @Override
+    public void updateOrdersWithClient(Client client) {
+        log.debug("Updating orders for client {}", client);
+        orderRepository.deleteAllByClientId(client.getId());
+        if (client.getOrders() != null) {
+            for (Order order : client.getOrders()) {
+                order.setClient(client);
+            }
         }
     }
 

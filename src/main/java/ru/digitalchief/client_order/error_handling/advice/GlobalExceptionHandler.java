@@ -1,6 +1,7 @@
 package ru.digitalchief.client_order.error_handling.advice;
 
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -112,6 +113,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {HttpRequestMethodNotSupportedException.class})
     public ResponseEntity<Object> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex, WebRequest webRequest) {
         HttpStatus methodNotAllowed = HttpStatus.METHOD_NOT_ALLOWED;
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+                ex.getMessage(),
+                methodNotAllowed,
+                webRequest.getDescription(false),
+                ZonedDateTime.now(ZoneId.systemDefault())
+        );
+        return new ResponseEntity<>(exceptionResponse, methodNotAllowed);
+    }
+
+    @ExceptionHandler(value = {DataIntegrityViolationException.class})
+    public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest webRequest) {
+        HttpStatus methodNotAllowed = HttpStatus.BAD_REQUEST;
         ExceptionResponse exceptionResponse = new ExceptionResponse(
                 ex.getMessage(),
                 methodNotAllowed,

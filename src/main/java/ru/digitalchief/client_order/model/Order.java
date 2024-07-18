@@ -30,7 +30,7 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
-    @ManyToOne
-    @JoinColumn(name = "client_id", referencedColumnName = "id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Client client;
 }

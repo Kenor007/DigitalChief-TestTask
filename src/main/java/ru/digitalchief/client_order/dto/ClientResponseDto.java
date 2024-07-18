@@ -1,7 +1,12 @@
 package ru.digitalchief.client_order.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Set;
 
+@Getter
+@Setter
 public class ClientResponseDto {
     private Long id;
     private String name;
